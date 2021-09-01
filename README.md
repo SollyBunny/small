@@ -1,2 +1,2 @@
 # small
-smowl editor made in c alternative to micro
+alternative to micro made in c (not done yet kinda bad)
