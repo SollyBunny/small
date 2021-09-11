@@ -198,6 +198,9 @@ int main(void) {
 				sizes[cury] = 1; 
 				lines[cury][0] = '!';
 				lines[cury][1] = '\0';
+
+				curx = 0;
+				maxintsize = u_intsize(linelen);
 				
 				redraw();
 				curset();
