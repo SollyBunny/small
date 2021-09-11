@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "util.h"
+
 unsigned int u_intsize(size_t i) {
 
 	if (i < 10) { return 1; }
@@ -19,7 +21,7 @@ unsigned int u_intsize(size_t i) {
 
 unsigned char ** u_split(unsigned char * data, unsigned int ** size, unsigned int * linelen) {
 
-	unsigned int lines = 1;
+	unsigned int lines = 0;
 	unsigned int lineon = 0;
 	
 	unsigned int i = 0;
@@ -32,8 +34,8 @@ unsigned char ** u_split(unsigned char * data, unsigned int ** size, unsigned in
 	}
 	*linelen = lines;
 	
-	unsigned char ** out  = malloc(lines * sizeof(void *));
-	*size = malloc(lines * sizeof(unsigned int));
+	unsigned char ** out  = malloc((1 + lines) * sizeof(void *));
+	*size = malloc((1 + lines) * sizeof(unsigned int));
 	i = 0;
 	
 	while (data[i] != '\0') {
@@ -62,7 +64,7 @@ unsigned char ** u_split(unsigned char * data, unsigned int ** size, unsigned in
 
 
 			(*size)[lineon] = (i - b - 1);
-			out[lineon] = malloc(i - b);
+			out[lineon] = malloc(i - b + 1);
 			//printf("%d %d\n", i - b, (*size)[i]);
 			//printf("%d\n", (*size)[0]);
 			
@@ -74,7 +76,7 @@ unsigned char ** u_split(unsigned char * data, unsigned int ** size, unsigned in
 			//out[lineon][i - b] = '\0';
 
 			//printf("LINE %u: '%s'\n", lineon + 1, out[lineon]);
-			lineon++;
+			
 
 			/*while (data[i] == '\n') {
 				out[lineon] = malloc(1);
@@ -85,6 +87,9 @@ unsigned char ** u_split(unsigned char * data, unsigned int ** size, unsigned in
 					break;
 				}
 			}*/
+			if (data[i] == '\0')
+				break;
+			lineon++;
 			b = i;	
 		}
 		i++;
