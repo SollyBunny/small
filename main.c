@@ -100,7 +100,7 @@ int main(void) {
 
 				switch (c) {
 					case 66: //down
-						if (cury == linelen - 1) // check if last line
+						if (cury == linelen) // check if last line
 							break;
 						if (curx > sizes[cury + 1]) // check if new pointer pos is over max length of line
 							curx = sizes[cury + 1];
@@ -185,6 +185,7 @@ int main(void) {
 				cury++;
 				linelen++;
 				lines = realloc(lines, (1 + linelen) * sizeof(void *));
+				sizes = realloc(sizes, (1 + linelen) * sizeof(unsigned int));
 
 				unsigned int i;
 				for (i = linelen - 1; i != cury; i--) {
@@ -197,10 +198,9 @@ int main(void) {
 				sizes[cury] = 1; 
 				lines[cury][0] = '!';
 				lines[cury][1] = '\0';
-				redraw();
-				printf("%d %d\n", cury, linelen);
-				curset();
 				
+				redraw();
+				curset();
 
 				continue;
 			}
@@ -214,12 +214,12 @@ int main(void) {
 			lines[cury] = realloc(lines[cury], sizes[cury] + 1); // realloc line too add a new chr
 			if (curx == sizes[cury]) { // if cursor is at end just appent it to the end
 				putchar(c);
-				lines[cury][curx] = c;
+				lines[cury][curx - 1] = c;
 			} else { // otherwise move all the chrs right 1 after cursor and add it there
 				//lines[0] = realloc(lines[0], sizes[cury]);
 				// offset everything by 1 after curx
 				unsigned int i;
-				for (i = sizes[cury] - 1; i != curx - 1; i--) {
+				for (i = sizes[cury] - 1; i != curx; i--) {
 					lines[cury][i] = lines[cury][i - 1];
 				}
 				lines[cury][i] = lines[cury][i - 1];
